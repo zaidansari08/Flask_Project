@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Umrah Tour</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1.h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        p.Para {
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .agency-section {
+            margin-bottom: 40px;
+        }
+
+        .agency-title {
+            color: #2c3e50;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .agency-info {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .package-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 0;
+        }
+
+        .package-card {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .package-card h4 {
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+
+        .package-card p {
+            margin: 4px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'header.html' %}
+    <h1 class="h1">Welcome to Umrah Tour</h1>
+    <p class="Para">Find the best Umrah travel agencies or list your own business.</p>
+    <form method="GET" action="{{ url_for('index') }}" style="text-align: center; margin-bottom: 30px;">
+        <input type="text" name="search" placeholder="Search by agency, city or country" value="{{ request.args.get('search', '') }}" style="padding: 8px; width: 300px; border-radius: 8px; border: 1px solid #ccc;">
+        <button type="submit" style="padding: 8px 12px; border-radius: 8px; border: none; background-color: #007bff; color: white;">Search</button>
+    </form>
+    
+
+    {% if agencies %}
+        {% for agency in agencies %}
+            <div class="agency-section">
+                
+
+                {% if agency.packages %}
+                    <div class="package-container">
+                        
+                        {% for pkg in agency.packages %}
+                            <div class="package-card">
+                                <div class="agency-title">{{ agency.agencies_name }}</div>
+                                <div class="agency-info">{{ agency.city }}, {{ agency.country }} | {{ agency.description }}</div>
+                                <h4>{{ pkg.package_name }}</h4>
+                                <p><strong>Days:</strong> {{ pkg.days }}</p>
+                                <p><strong>Price:</strong> ₹{{ pkg.price }}</p>
+                                <p><strong>Description:</strong> {{ pkg.description }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p style="margin-left: 10px;">No packages available for this agency.</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align: center;">No agencies available.</p>
+    {% endif %}
+</body>
+</html>

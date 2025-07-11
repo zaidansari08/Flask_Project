@@ -1,0 +1,92 @@
+<!-- templates/header.html -->
+<header class="header">
+    <h1>Umrah Tour</h1>
+
+    <div class="header-right">
+        {% if request.path == url_for('index') %}
+            <a href="{{ url_for('enter_email') }}">
+                <button class="button">List Business</button>
+            </a>
+        {% elif request.path.startswith(url_for('business_dashboard')) %}
+            <span class="welcome-msg">Welcome, {{ session.get('email', 'User') }}</span>
+
+            <a href="{{ url_for('add_agency_page') }}">
+                <button class="button">Add Agency</button>
+            </a>
+
+           
+        {% endif %}
+    </div>
+</header>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.header {
+    background-color: rgb(140, 150, 166);
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    font-family: 'Playfair Display', serif;
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: 1px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.button {
+    background-color: white;
+    color: #007bff;
+    border: 1px solid white;
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+.logout-btn {
+    background-color: #dc3545;
+    color: white;
+    border: 1px solid #dc3545;
+}
+
+.logout-btn:hover {
+    background-color: #b02a37;
+    border-color: #b02a37;
+}
+
+.welcome-msg {
+    color: #fff;
+    margin-right: 10px;
+    font-size: 16px;
+    font-weight: normal;
+}
+</style>

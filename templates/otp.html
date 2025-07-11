@@ -1,0 +1,134 @@
+<!-- templates/otp.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+</head>
+<body>
+    {% include 'header.html' %}
+    <h1>OTP Verification</h1>
+    <p>Enter the 6-digit OTP sent to your email.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="/verify_otp" method="post">
+        <label for="otp">OTP:</label>
+        <input type="text" id="otp" name="otp" required pattern="\d{6}" maxlength="6">
+        <button type="submit">Verify OTP</button>
+    </form>
+
+    <p>Didn't receive the OTP? <a href="{{ url_for('enter_email') }}">Try again</a></p>
+</body>
+</html>
+
+<style>
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400&display=swap');
+
+
+   
+    /* Heading */
+    h1 {
+        
+        font-size: 20px;
+        margin-bottom: 10px;
+        
+    }
+
+    /* Paragraph Styling */
+    p {
+        font-size: 16px;
+        text-align: left;
+        margin-bottom: 15px;
+    }
+
+    /* Flash Messages */
+    p[style="color: red;"] {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    /* Form Styling */
+    form {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: left;
+        width: 40%;
+        max-width: 400px;
+    }
+
+    /* Label Styling */
+    label {
+        font-weight: bold;
+        color: #333;
+        display: block;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+
+    /* OTP Input Field */
+    input[type="text"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: center;
+        transition: border-color 0.3s ease-in-out;
+    }
+
+    input[type="text"]:focus {
+        border-color: #007bff;
+        outline: none;
+        text-align: center;
+    }
+
+    /* Verify Button */
+    button {
+        display: block;
+        margin: 15px auto 0;
+        width: 40%;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        font-size: 18px;
+        border-radius: 8px;
+        margin-top: 10px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Link Styling */
+    a {
+        color:rgb(0, 0, 0);
+        text-decoration: underline;
+        font-weight: bold;
+    }
+
+    a:hover {
+        color:rgb(255, 5, 5);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+        form {
+            width: 90%;
+        }
+    }
+</style>

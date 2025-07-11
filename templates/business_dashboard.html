@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Business Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+        }
+        .button1 {
+            background-color: #0056b3;
+            color: #ffffff;
+            border: 1px solid white;
+            padding: 8px 16px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 500;
+          
+        }
+
+        
+
+        h2 {
+            text-align: center;
+            color: #222;
+            margin: 30px 0;
+            font-size: 28px;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .agency-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            transition: 0.3s ease-in-out;
+        }
+
+        .agency-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .agency-card h3 {
+            color: #007bff;
+            margin-bottom: 6px;
+        }
+
+        .agency-location {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .toggle-btn {
+            margin-bottom: 10px;
+            padding: 6px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .toggle-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .agency-details {
+            display: none;
+            margin-bottom: 15px;
+        }
+
+        .agency-details p {
+            margin: 4px 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .package-list {
+            max-height: 220px;
+            overflow-y: auto;
+            padding-right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .package {
+            background-color: #fefefe;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #007bff;
+            border: 1px solid #ddd;
+        }
+
+        .package p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .package strong {
+            color: #000;
+        }
+
+        .no-packages {
+            color: #888;
+            font-style: italic;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .logout-link {
+            display: block;
+            text-align: center;
+            margin: 40px auto 0;
+            color: red;
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid red;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: 0.3s ease;
+            width: fit-content;
+        }
+
+        .logout-link:hover {
+            background-color: red;
+            color: white;
+        }
+
+        .package-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .package-list::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <div class="dashboard-container">
+        <h2>Welcome to Business Dashboard</h2>
+
+        {% for agency in agencies %}
+        <div class="agency-card">
+            <h3>{{ agency.agencies_name }}</h3>
+            <div class="agency-location">{{ agency.agency_location }}</div>
+
+            <button class="toggle-btn" onclick="toggleDetails('details-{{ agency.registration_id }}', this)">
+                View Detail
+            </button>
+
+            <div class="agency-details" id="details-{{ agency.registration_id }}">
+                <p><strong>Agency Name:</strong> {{ agency.agencies_name }}</p>
+                <p><strong>Country:</strong> {{ agency.country }}</p>
+                <p><strong>City:</strong> {{ agency.city }}</p>
+                <p><strong>Description:</strong> {{ agency.description }}</p>
+            </div>
+
+            {% if agency.packages %}
+            <div class="package-list">
+                {% for pkg in agency.packages %}
+                <div class="package">
+                    <p><strong>Package:</strong> {{ pkg.package_name }}</p>
+                    <p><strong>Days:</strong> {{ pkg.days }}</p>
+                    <p><strong>Price:</strong> ₹{{ pkg.price }}</p>
+                    <p><strong>Description:</strong> {{ pkg.description }}</p>
+                    <a href="{{ url_for('delete_package', package_id=pkg.package_id) }}"
+                       onclick="return confirm('Delete this package?');">
+                        <button class="delete-btn">Delete Package</button>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="no-packages">No packages available for this agency.</p>
+            {% endif %}
+            <a href="{{ url_for('add_packages_page') }}">
+                <button class="button1">Add Packages</button>
+            </a>
+        </div>
+        {% endfor %}
+
+        <a class="logout-link" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+
+    <script>
+        function toggleDetails(id, btn) {
+            const el = document.getElementById(id);
+            const isVisible = el.style.display === 'block';
+            el.style.display = isVisible ? 'none' : 'block';
+            btn.textContent = isVisible ? 'View Detail' : 'Hide Detail';
+        }
+    </script>
+</body>
+</html>
